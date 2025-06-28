@@ -357,8 +357,6 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
     boolean mainSound = true;
     int mainMusicCounter = 0;
 
-    //int lastScore = App.user.getLastScore();
-    //int highScore = App.user.getHighScore();
 
     static boolean pacmanK = false;
     static boolean pacmanExit = false;
@@ -505,7 +503,7 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
 
     private String[] tileMapW = {
         "XXXXXXXXXXXXXXXXXXX",
-        "X  E      K       X",
+        "X  E              X",
         "XXXXXXXXXXXXXXXX  X",
         "X                 X",
         "X  XXXXXXXXXXXXXXXX",
@@ -523,9 +521,11 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
         "XXXXXXXXXXXXX  X  X",
         "X                 X",
         "X XXXXXXXXXXXXXXXXX",
-        "X                 X",
+        "X             K   X",
         "XXXXXXXXXXXXXXXXXXX"
 };
+
+
 
     ArrayList<Block> walls;
     HashSet<Block> foods;
@@ -810,7 +810,7 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
                     Block snake9 = new Block(snakeendRImage, x + 5 * tileSize, y , tileSize , tileSize ,"e");
                     snake2.add(snake9);
                 }
-                else if (tileMapChar == ' ') { //food
+                else if (tileMapChar == ' '  || tileMapChar == 'E' || tileMapChar == 'H' || tileMapChar == '1' || tileMapChar == 'r' || tileMapChar == 'p' || tileMapChar == 'o' || tileMapChar == 'b') { //food
                     Block food = new Block(null, x + 14, y + 14, 4, 4);
                     foods.add(food);
                 }
@@ -1243,7 +1243,7 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
                 firstInfinityGhostSpawn = false;
             }
 
-            int ghostspawnnum = random.nextInt(100);
+            int ghostspawnnum = random.nextInt(200);
             if(ghostspawnnum == 1){
                 int color = random.nextInt(4);
                 switch (color){
@@ -1514,6 +1514,7 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
                     imagePh++;
                 }, 0, 5, TimeUnit.SECONDS);
                 if(snake.isEmpty() && snake2.isEmpty()) {
+                    lives += 6;
                     imageSpawnerDelay = System.currentTimeMillis();
                     PacMan.PacManImage(PacMan.direction, PacMan.isGunner);
                     PacMan.isGunner = false;
@@ -2203,7 +2204,7 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
             lightGhost.x += lightGhost.velocityX;
             lightGhost.y += lightGhost.velocityY;
 
-            for (PacMan.Block wall : new ArrayList<>(walls)) { // احتیاط
+            for (PacMan.Block wall : new ArrayList<>(walls)) { 
                 if (collision(lightGhost, wall) || lightGhost.x <= 0 || lightGhost.x + lightGhost.width >= boardWidth) {
                     lightGhost.x -= lightGhost.velocityX;
                     lightGhost.y -= lightGhost.velocityY;
@@ -2283,7 +2284,7 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
 
             if (collision(InfinityGhost, PacMan)) {
                 if(InfinityGhost.sname.length() != 1){
-                    lives = 0;
+                    lives -= 2;
                 }
                 else{
                     lives--;
@@ -2462,11 +2463,7 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
             InfinityGhosts.clear();
             AudioManager.stopLooping("ph3");
 
-            /*App.user.setLastScore(score);
-            if(score > App.user.getHighScore()){
-                App.user.setHighScore(score);
-            }
-            App.db.updateGameUserById(App.user);*/
+            
             if(!phasechanger) {
                 phase5to6 = System.currentTimeMillis();
                 phasechanger = true;
